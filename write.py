@@ -40,32 +40,45 @@ def main() -> None:
         log("no postings to write")
         return
 
-    data.sort(key=lambda p: p.get("score", 0), reverse=True)
+    data.sort(key=lambda p: p.get("display_score", p.get("score", 0)), reverse=True)
 
     gc = get_client()
     sh = gc.open_by_key(os.environ["SHEET_ID"])
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
 
-    # --- jobs tab (only score > 0 — zeroes are noise)
+    # --- jobs tab (only non-disqualified with score > 0)
     jobs_ws = sh.worksheet("jobs")
-    scorable = [p for p in data if p.get("score", 0) > 0]
+    scorable = [
+        p for p in data
+        if not p.get("disqualified", False)
+        and p.get("display_score", p.get("score", 0)) > 0
+    ]
     job_rows = []
     for p in scorable:
+        score = p.get("display_score", p.get("score", ""))
+        confidence = p.get("confidence", "")
+        why = p.get("notes") or p.get("why_relevant") or ""
+        if not why and p.get("axes"):
+            parts = []
+            for axis, detail in p["axes"].items():
+                parts.append(f"{axis}:{detail['score']} {detail['why']}")
+            why = "; ".join(parts)
         job_rows.append([
             now,
-            p.get("score", ""),
+            score,
+            confidence,
             p.get("title", ""),
             p.get("company", ""),
             p.get("salary", ""),
             p.get("location", ""),
             p.get("source", ""),
             p.get("url", ""),
-            p.get("why_relevant", ""),
+            why,
             "",  # status — filled manually by Denis
         ])
     if job_rows:
         jobs_ws.append_rows(job_rows, value_input_option="RAW")
-    log(f"jobs: appended {len(job_rows)} rows (skipped {len(data) - len(scorable)} zero-score)")
+    log(f"jobs: appended {len(job_rows)} rows (skipped {len(data) - len(scorable)} disqualified/zero-score)")
 
     # --- seen tab
     seen_ws = sh.worksheet("seen")
@@ -88,13 +101,15 @@ def main() -> None:
     wl_rows = []
     added_companies: set[str] = set()
     for p in data:
-        if p.get("score", 0) >= 8:
+        score = p.get("display_score", p.get("score", 0))
+        if score >= 8 and not p.get("disqualified", False):
             company = p.get("company", "").strip()
             if company.lower() not in existing_companies and company.lower() not in added_companies:
+                reason = p.get("notes") or p.get("why_relevant") or ""
                 wl_rows.append([
                     company,
                     now,
-                    p.get("why_relevant", ""),
+                    reason,
                     "",  # careers_url — filled later
                 ])
                 added_companies.add(company.lower())

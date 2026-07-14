@@ -19,7 +19,7 @@ import gspread
 REQUIRED_TABS = ["jobs", "seen", "watchlist"]
 
 JOBS_HEADER = [
-    "found_at", "score", "title", "company", "salary",
+    "found_at", "score", "confidence", "title", "company", "salary",
     "location", "source", "url", "why_relevant", "status",
 ]
 SEEN_HEADER = ["url_hash", "company", "title", "first_seen"]
