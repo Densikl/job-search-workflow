@@ -75,10 +75,10 @@ A future weekly task reads these verdicts and proposes rubric changes as a PR.
 DONE:
 - `test_sheets.py` — verifies service-account access, auto-creates missing tabs
   with headers, appends a test row. Works.
-- `fetch.py` — three sources (RemoteOK, Remotive, WWR), schema with `tags` field,
-  canonical_url/url_hash/company::title dedupe, batch dedupe, seen-tab dedupe.
-  RemoteOK queries `?tag=python` + `?tag=backend` merged by id. Keyword filter
-  checks title + description + tags. Typical run: ~200 fetched, ~160 unique.
+- `fetch.py` + `sources.py` + `common.py` — four sources (RemoteOK, Remotive, WWR,
+  Jobicy), schema with `tags` field. Fetchers live in `sources.py`, shared utils
+  in `common.py`. Keyword filter checks title + description only (not tags — too
+  noisy from RemoteOK). Typical run: ~300 fetched, ~70 after filter.
 - `rubric.md` — scoring rubric v1: axes (stack, seniority, industry, location,
   salary), hard disqualifiers, worked examples.
 - `write.py` — reads scored JSON, appends score>0 to `jobs` (sorted by score desc),
@@ -91,7 +91,11 @@ DONE:
 
 NOT DONE:
 - HH.ru source (returns 403, likely geo-blocked from outside Russia/CIS)
-- Later sources: HN "Who is Hiring" via Algolia API, Himalayas
+- Later sources (researched, APIs confirmed working):
+  - Arbeitnow: public JSON API, EU-leaning, category filter broken server-side
+  - Himalayas: public JSON API, huge catalog (~103k), filter broken server-side
+  - python.org RSS: tiny volume, easy to add
+  - HN "Who is Hiring" via Algolia API: high signal but unstructured text, needs parsing
 
 ## Immediate TODO (in order)
 
