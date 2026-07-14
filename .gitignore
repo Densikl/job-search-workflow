@@ -3,3 +3,4 @@ new.json
 scored.json
 /.claude
 /.venv
+/__pycache__
