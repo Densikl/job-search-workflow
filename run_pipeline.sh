@@ -11,6 +11,7 @@ python fetch.py > new.json 2>> "$LOG"
 echo "fetch done" >> "$LOG"
 
 claude -p "$(cat nightly_prompt.md)" \
+  --model claude-sonnet-4-6 \
   --allowedTools "Read,Write" \
   --output-format text >> "$LOG" 2>&1
 echo "score done" >> "$LOG"
