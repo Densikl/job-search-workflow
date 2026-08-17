@@ -99,14 +99,7 @@ NOT DONE:
 
 ## Immediate TODO (in order)
 
-1. **Second dress rehearsal**: clear the sheet, re-run the full chain to verify the
-   zero-score filter works in write.py. Confirm `seen` tab dedupe blocks repeats.
-2. Promote to a cloud Routine via `/schedule`: nightly, exact rehearsed prompt,
-   `GOOGLE_SA_JSON` (raw JSON) + `SHEET_ID` as task env vars. Fire once manually
-   to verify the sandbox reaches job boards + Google APIs. Notes: cloud tasks run
-   from a fresh clone (no local state — that's why dedupe lives in the Sheet),
-   run autonomously without permission prompts, min interval 1h.
-3. Later (after ~1 week of real reviews): second weekly Routine that reads `status`
+1. Later (after ~1 week of real reviews): second weekly Routine that reads `status`
    verdicts, compares to its own scores, proposes rubric.md changes as a PR on a
    `claude/` branch. Denis merges or rejects. Add Telegram digest (score ≥7) to
    write.py around the same time.

@@ -19,8 +19,11 @@ from datetime import datetime, timezone
 from urllib.parse import urlsplit, urlunsplit
 
 import httpx
+from dotenv import load_dotenv
 
 from common import KEYWORDS, log
+
+load_dotenv()
 
 # ---------------------------------------------------------------- dedupe
 
