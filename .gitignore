@@ -1,6 +1,7 @@
 .env
 new.json
 scored.json
+pipeline.log
 /.claude
 /.venv
 /__pycache__
