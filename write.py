@@ -77,7 +77,7 @@ def main() -> None:
             p.get("source", ""),
             p.get("url", ""),
             why,
-            "",  # status — filled manually by Denis
+            "",  # status — filled manually during review
         ])
     if job_rows:
         jobs_ws.append_rows(job_rows, value_input_option="RAW")

@@ -2,16 +2,12 @@
 
 A Claude Code–driven pipeline that finds Python backend jobs nightly, scores them
 for fit, and stores them in a Google Sheet for review. No auto-applying. The human
-(Denis) stays the reviewer: the pipeline stops at "here's a ranked shortlist."
+stays the reviewer: the pipeline stops at "here's a ranked shortlist."
 
-## Owner profile (used for scoring)
+## Owner profile
 
-- Junior/middle Python backend developer, ~2 years production experience
-- Stack: FastAPI, Django/DRF, Celery, Redis, PostgreSQL, Docker, WebSockets, async SQLAlchemy
-- Strong preference: fintech and crypto/blockchain infrastructure companies
-- Location: Tbilisi, Georgia → remote-friendly or Georgia-eligible roles only
-- Hard disqualifiers: senior/staff-only roles, US-only/EU-only w/o Georgia, roles where
-  Python is incidental to a Go/Java-primary stack
+See `rubric.md` for the target profile that drives scoring. Copy
+`rubric.md.example` to `rubric.md` and customize it before running the pipeline.
 
 ## Doctrine (guiding principles — do not violate)
 
@@ -32,7 +28,8 @@ for fit, and stores them in a Google Sheet for review. No auto-applying. The hum
 fetch.py           deterministic fetcher: aggregators → normalized JSON → dedupe
                      vs `seen` tab → NEW postings as JSON on stdout (logs on stderr)
 write.py           scored JSON → append score>0 to `jobs`, ALL to `seen`, ≥8 to `watchlist`
-rubric.md          scoring criteria for Claude (axes, disqualifiers, examples)
+rubric.md.example  scoring rubric template — copy to rubric.md and customize
+rubric.md          [gitignored] personal scoring criteria (axes, disqualifiers)
 test_sheets.py     verifies service-account access, creates tabs, appends test row
 requirements.txt   httpx, gspread, feedparser
 .env               GOOGLE_SA_JSON (single-quoted raw JSON) + SHEET_ID (not committed)
@@ -55,7 +52,7 @@ Google Sheet tabs (created by test_sheets.py):
 - `seen`:      url_hash, company, title, first_seen
 - `watchlist`: company, added_at, reason, careers_url
 
-`status` in `jobs` is filled manually by Denis while reviewing
+`status` in `jobs` is filled manually by the reviewer
 (applied / skipped-senior / skipped-stack / skipped-region / interview).
 A future weekly task reads these verdicts and proposes rubric changes as a PR.
 
@@ -101,8 +98,7 @@ NOT DONE:
 
 1. Later (after ~1 week of real reviews): second weekly Routine that reads `status`
    verdicts, compares to its own scores, proposes rubric.md changes as a PR on a
-   `claude/` branch. Denis merges or rejects. Add Telegram digest (score ≥7) to
-   write.py around the same time.
+   `claude/` branch. The owner merges or rejects.
 
 ## Nightly Routine prompt (draft — refine during rehearsal)
 

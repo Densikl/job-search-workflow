@@ -61,7 +61,7 @@ The rubric lives in `rubric.md` — a versioned, auditable spec the LLM reads at
 | Stack match | 30% | Python-primary? FastAPI, async, PostgreSQL, Redis? |
 | Seniority fit | 25% | Junior/mid-level, or plausibly open to it? |
 | Industry | 20% | Fintech, crypto, payments, or adjacent? |
-| Location eligibility | 15% | Fully remote, EMEA, or UTC+4 workable? |
+| Location eligibility | 15% | Fully remote, or workable from your timezone? |
 | Salary signal | 10% | Listed and ≥ $40k? (most postings omit this) |
 
 `weighted_score = Σ(axis_score × weight)`. `display_score = round(weighted_score)`. Postings with `display_score > 0` go to the `jobs` tab; zero-scorers go only to `seen`.
@@ -137,7 +137,11 @@ This creates the three tabs with correct headers and appends a test row. If it c
 
 ### 4. Customize the rubric
 
-Edit `rubric.md` to match your profile — location, stack, seniority target, industry preferences. The worked examples at the bottom help calibrate the scoring weights to your actual priorities.
+```bash
+cp rubric.md.example rubric.md
+```
+
+Edit `rubric.md` to match your profile — location, stack, seniority target, industry preferences. Look for `<YOUR_...>` placeholders and `<!-- Customize -->` comments. The worked examples at the bottom help calibrate the scoring weights to your actual priorities.
 
 ---
 
@@ -195,5 +199,4 @@ Output appends to `pipeline.log` in the project directory.
 
 - **HH.ru** — returns 403 from outside Russia/CIS. Geo-blocked.
 - **Arbeitnow, Himalayas, python.org RSS, HN "Who Is Hiring"** — APIs confirmed working, not yet integrated.
-- **Rubric feedback loop** — a weekly routine that reads the `status` verdicts Denis fills in, compares them to the original scores, and proposes `rubric.md` edits as a PR. Planned after enough reviews accumulate to make the signal meaningful.
-- **Telegram digest** — push notification for postings that score ≥ 7, so the review queue is visible without opening the Sheet.
+- **Rubric feedback loop** — a weekly routine that reads the `status` verdicts the reviewer fills in, compares them to the original scores, and proposes `rubric.md` edits as a PR. Planned after enough reviews accumulate to make the signal meaningful.
