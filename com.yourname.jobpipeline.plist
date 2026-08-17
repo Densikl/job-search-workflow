@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Before loading this file, replace every occurrence of YOUR_USERNAME
+  with your actual macOS username (run `whoami` in Terminal to check).
+  Then rename the file to com.YOUR_USERNAME.jobpipeline.plist and copy
+  it to ~/Library/LaunchAgents/.
+
+  To load:   launchctl load ~/Library/LaunchAgents/com.YOUR_USERNAME.jobpipeline.plist
+  To unload: launchctl unload ~/Library/LaunchAgents/com.YOUR_USERNAME.jobpipeline.plist
+  To verify: launchctl list | grep jobpipeline
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.YOUR_USERNAME.jobpipeline</string>   <!-- replace YOUR_USERNAME -->
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/absolute/path/to/job_posting_workflow/run_pipeline.sh</string>   <!-- replace with the full path to run_pipeline.sh -->
+  </array>
+
+  <!-- Run at 08:00 local time daily. Fires on next wake if the machine was asleep. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/absolute/path/to/job_posting_workflow/pipeline.log</string>   <!-- replace with the full path to the project directory -->
+  <key>StandardErrorPath</key>
+  <string>/absolute/path/to/job_posting_workflow/pipeline.log</string>   <!-- replace with the full path to the project directory -->
+
+  <!-- launchd starts jobs with a stripped environment — PATH and HOME must be set explicitly. -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/YOUR_USERNAME/.local/bin:/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>   <!-- replace YOUR_USERNAME -->
+    <key>HOME</key>
+    <string>/Users/YOUR_USERNAME</string>   <!-- replace YOUR_USERNAME -->
+  </dict>
+</dict>
+</plist>
