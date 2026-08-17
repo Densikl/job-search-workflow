@@ -99,11 +99,3 @@ NOT DONE:
 1. Later (after ~1 week of real reviews): second weekly Routine that reads `status`
    verdicts, compares to its own scores, proposes rubric.md changes as a PR on a
    `claude/` branch. The owner merges or rejects.
-
-## Nightly Routine prompt (draft — refine during rehearsal)
-
-> Run `pip install -r requirements.txt`, then `python fetch.py > new.json`.
-> Read new.json. Score each posting 0–10 against rubric.md; add a one-line
-> why_relevant for each. Write the scored array to scored.json, then run
-> `python write.py scored.json`. If any step fails, stop and report the error
-> clearly. Do not edit rubric.md. Do not browse the web.
